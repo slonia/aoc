@@ -15,7 +15,8 @@ class Star1
     @n.times do |i|
       @n.times do |j|
         if i != j
-          @distances[i][j] = parse(lines[k])
+          @distances[i][j] += parse(lines[k])
+          @distances[j][i] += parse(lines[k])
           k+=1
         end
       end
@@ -29,9 +30,9 @@ class Star1
   def count_happ
     max = -1
     (0..(@n-1)).to_a.permutation.to_a.each do |perm|
-      happ = @distances[perm[0]][perm[-1]] +  @distances[perm[-1]][perm[0]]
+      happ = @distances[perm[0]][perm[-1]]
       (0..(@n-2)).each do |i|
-        happ += @distances[perm[i]][perm[i+1]] +  @distances[perm[i+1]][perm[i]]
+        happ += @distances[perm[i]][perm[i+1]]
       end
       max = happ if happ > max
     end
