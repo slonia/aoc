@@ -4,11 +4,12 @@ class Star1
 
   def initialize
     @dividers = {}
-    start = 400_000
+    start = 0_000
     loop do
+      puts start if start % 50_000 == 0
       # puts start
       r = for_house(start)
-      if r >= TARGET
+      if r >= TARGET || start > 1000
         break
       end
       start += 1
