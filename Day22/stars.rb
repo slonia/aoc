@@ -43,19 +43,9 @@ class Battle
     loop do
       if player
         @desc << "---- PLAYER ----- \n"
+        @desc << "Player has #{@player[:hp]} hp, #{@player[:mana]} mana, #{@player[:armor]} armor\n"
+        @desc << "Boss has #{@boss[:hp]} hp\n"
         use_abilities
-        status = check_status
-        if status == :player
-          return {
-            win: true,
-            mana: @used_mana
-          }
-        elsif status == :boss
-          return {
-            win: false,
-            mana: @used_mana
-          }
-        end
         ability = random_ability
         if ability
           cast(ability)
@@ -80,6 +70,8 @@ class Battle
         end
       else
         @desc << "---- BOSS ----- \n"
+        @desc << "Player has #{@player[:hp]} hp, #{@player[:mana]} mana, #{@player[:armor]} armor\n"
+        @desc << "Boss has #{@boss[:hp]} hp\n"
         use_abilities
         status = check_status
         if status == :player
@@ -152,13 +144,13 @@ class Battle
     case ability
     when :shield
       @player[:armor] = 7
-      @desc << "Armor 7. Now armor is #{@player[:armor]}. Armor timer is #{@current_abilities[ability]}\n"
+      @desc << "Armor 7. Now armor is #{@player[:armor]}. Armor timer is #{@current_abilities[ability]-1}\n"
     when :poison
       @boss[:hp] -= 3
-      @desc << "Poison deals 3 damage. Boss has #{@boss[:hp]} hp. Poison timer is #{@current_abilities[ability]}\n"
+      @desc << "Poison deals 3 damage. Boss has #{@boss[:hp]} hp. Poison timer is #{@current_abilities[ability]-1}\n"
     when :recharge
       @player[:mana] += 101
-      @desc << "Recharge restores 101 mana. Player has #{@player[:mana]} mana. Recharge timer is #{@current_abilities[ability]}\n"
+      @desc << "Recharge restores 101 mana. Player has #{@player[:mana]} mana. Recharge timer is #{@current_abilities[ability]-1}\n"
     end
   end
 
@@ -166,7 +158,7 @@ class Battle
     @current_abilities.each do |k, v|
       cast_effect(k)
       @current_abilities[k] -= 1
-      @player[:armor] = 0 if k == :shield && v < 1
+      @player[:armor] = 0 if k == :shield && v < 2
     end
     @current_abilities = @current_abilities.select {|k, v| v > 0}
   end
