@@ -12,9 +12,10 @@ class Battle
     poison: 6,
     recharge: 5
   }
-  def initialize(mana, hp, boss_hp, damage)
+  def initialize(mana, hp, boss_hp, damage, hardmode)
     min = 2_000_000
     desc = ''
+    @hardmode = true
     1_000_000.times do
       @desc = ''
       @player = {
@@ -45,6 +46,7 @@ class Battle
         @desc << "---- PLAYER ----- \n"
         @desc << "Player has #{@player[:hp]} hp, #{@player[:mana]} mana, #{@player[:armor]} armor\n"
         @desc << "Boss has #{@boss[:hp]} hp\n"
+        @player[:hp] -= 1 if @hardmode
         use_abilities
         ability = random_ability
         if ability
@@ -169,4 +171,4 @@ class Battle
   end
 end
 
-Battle.new(500, 50, 58, 9)
+Battle.new(500, 50, 58, 9, true)
