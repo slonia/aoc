@@ -1,26 +1,35 @@
 class Star1
   def initialize
     read
+    3.times do
+      result = knap_iter
+      puts result.join(' ')
+      puts result.inject(:+)
+      puts result.inject(:*)
+    end
+  end
+
+  def knap_iter
+    @a = Array.new(@count+1) { Array.new(@goal+1)}
+    @used = []
     knap
     find(@count, @goal)
-    puts @used.join(' ')
-    puts @used.inject(:+)
-    puts @used.inject(:*)
+    @weights -= @used
+    @count = @weights.size - 1
+    @used
   end
 
   def read
-    @total = 0
+    total = 0
     @weights = [0]
     @count = 0
     File.foreach('input.txt') do |line|
       weight = line.chomp.to_i
       @weights << weight
-      @total += weight
+      total += weight
       @count += 1
     end
-    @used = []
-    @goal = @total / 3
-    @a = Array.new(@count+1) { Array.new(@goal+1)}
+    @goal = total / 3
   end
 
   def knap
