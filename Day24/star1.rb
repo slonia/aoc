@@ -1,12 +1,21 @@
 class Star1
+  N = 3 # set to 4 for second part
   def initialize
     read
-    3.times do
+    min_length = 100
+    N.times do
       result = knap_iter
-      puts result.join(' ')
-      puts result.inject(:+)
-      puts result.inject(:*)
+      min_length = result.size if result.size < min_length
     end
+    answer = nil
+    @all_weights.combination(min_length).each do |comb|
+      sum = comb.inject(:+)
+      if sum == @goal
+        enlightment = comb.inject(:*)
+        answer = enlightment if answer.nil? || enlightment < answer
+      end
+    end
+    puts answer
   end
 
   def knap_iter
@@ -20,16 +29,18 @@ class Star1
   end
 
   def read
+    @all_weights = []
     total = 0
     @weights = [0]
     @count = 0
     File.foreach('input.txt') do |line|
       weight = line.chomp.to_i
       @weights << weight
+      @all_weights << weight
       total += weight
       @count += 1
     end
-    @goal = total / 3
+    @goal = total / N
   end
 
   def knap
