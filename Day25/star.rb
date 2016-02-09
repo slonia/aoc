@@ -5,32 +5,23 @@ class Star
 
   MULT = 252533
   DIV = 33554393
+  START = 20151125
 
   def initialize
-    size = [ROW, COL].max * 2
-    @a = Array.new(size) { Array.new(size, 0) }
-    i = 0
-    j = 0
-    el_proc = 0
-    cur_diag = 1
-    value = 20151125
-    0.upto(size**2-1) do
-      break if @a[i].nil?
-      @a[i][j] = value
-      value = (value * MULT)%DIV
-      el_proc += 1
-      if el_proc == cur_diag
-        el_proc = 0
-        i = cur_diag
-        j = 0
-        cur_diag += 1
-      else
-        i -= 1
-        j += 1
-      end
+    n = num(ROW, COL)
+    puts value_at(n)
+  end
+
+  def value_at(exponent)
+    c = 1
+    (exponent-1).times do
+      c = (c * MULT) % DIV
     end
-    # puts @a.map {|a| a.join(' ')}
-    puts @a[ROW-1][COL-1]
+    (START*c)%DIV
+  end
+
+  def num(j, i)
+    (i*i + j*j + 2*i*j -i -3*j+2)/2
   end
 
 end
